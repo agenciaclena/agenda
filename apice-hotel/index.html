@@ -1001,10 +1001,6 @@ RESPONSIVO
 
 <script>
 
-// =======================================
-// SUPABASE
-// =======================================
-
 const SUPABASE_URL =
 "https://sixxevqexeevkyfujxms.supabase.co"
 
@@ -1017,41 +1013,53 @@ SUPABASE_URL,
 SUPABASE_KEY
 )
 
-// =======================================
-// DADOS DOS QUARTOS
-// =======================================
+// =========================================
+// OVERLAY
+// =========================================
 
-const quartos = [
+function loading(show=true){
 
-  {
-    nome:"Suíte Master",
-    valor:580,
-    status:"Disponível"
-  },
+  let el =
+  document.getElementById("loading")
 
-  {
-    nome:"Luxo Casal",
-    valor:420,
-    status:"Reservado"
-  },
+  if(show){
 
-  {
-    nome:"Executivo",
-    valor:280,
-    status:"Disponível"
-  },
+    if(!el){
 
-  {
-    nome:"Premium Vista",
-    valor:690,
-    status:"Ocupado"
+      const div =
+      document.createElement("div")
+
+      div.id="loading"
+
+      div.innerHTML=`
+
+      <div class="loadingBox">
+
+        <div class="spinner"></div>
+
+        <span>
+          Carregando...
+        </span>
+
+      </div>
+
+      `
+
+      document.body.appendChild(div)
+
+    }
+
+  }else{
+
+    if(el) el.remove()
+
   }
 
-]
+}
 
-// =======================================
+// =========================================
 // MODAL
-// =======================================
+// =========================================
 
 function abrirModal(){
 
@@ -1065,15 +1073,104 @@ function fecharModal(){
 
 }
 
-// =======================================
-// RENDER QUARTOS
-// =======================================
+// =========================================
+// MASCARA CPF
+// =========================================
 
-function renderRooms(){
+cpf.addEventListener("input",()=>{
+
+  let v =
+  cpf.value
+  .replace(/\D/g,'')
+
+  v=v.replace(
+  /(\d{3})(\d)/,
+  '$1.$2'
+  )
+
+  v=v.replace(
+  /(\d{3})(\d)/,
+  '$1.$2'
+  )
+
+  v=v.replace(
+  /(\d{3})(\d{1,2})$/,
+  '$1-$2'
+  )
+
+  cpf.value=v
+
+})
+
+// =========================================
+// MASCARA WHATSAPP
+// =========================================
+
+whatsapp.addEventListener("input",()=>{
+
+  let v =
+  whatsapp.value
+  .replace(/\D/g,'')
+
+  v=v.replace(
+  /^(\d{2})(\d)/g,
+  '($1) $2'
+  )
+
+  v=v.replace(
+  /(\d)(\d{4})$/,
+  '$1-$2'
+  )
+
+  whatsapp.value=v
+
+})
+
+// =========================================
+// CARREGAR QUARTOS
+// =========================================
+
+async function carregarQuartos(){
+
+  const {
+    data,
+    error
+  } = await supabase
+
+  .from("hotel_quartos")
+  .select("*")
+  .order("valor",{ascending:false})
+
+  if(error){
+
+    console.log(error)
+    return
+
+  }
 
   rooms.innerHTML=""
+  quarto.innerHTML=""
 
-  quartos.forEach(q=>{
+  let disponiveis=0
+
+  data.forEach(q=>{
+
+    if(q.status==="Disponível")
+    disponiveis++
+
+    quarto.innerHTML+=`
+
+      <option value="${q.id}"
+      data-nome="${q.nome}"
+      data-valor="${q.valor}">
+
+      ${q.nome}
+      • R$ ${Number(q.valor)
+      .toFixed(2)}
+
+      </option>
+
+    `
 
     rooms.innerHTML+=`
 
@@ -1085,16 +1182,22 @@ function renderRooms(){
 
             <h3>${q.nome}</h3>
 
-            <p>
-              Quarto premium
-            </p>
+            <p>${q.descricao || ''}</p>
 
           </div>
 
         </div>
 
         <div class="price">
-          R$ ${q.valor.toFixed(2)}
+
+          ${Number(q.valor)
+          .toLocaleString(
+          'pt-BR',
+          {
+            style:'currency',
+            currency:'BRL'
+          })}
+
         </div>
 
         <div class="
@@ -1112,13 +1215,274 @@ function renderRooms(){
 
   })
 
+  quartosDisponiveis.innerHTML =
+  disponiveis
+
 }
 
-// =======================================
-// CALENDARIO
-// =======================================
+// =========================================
+// SALVAR RESERVA
+// =========================================
 
-function renderCalendar(){
+async function salvarReserva(){
+
+  loading(true)
+
+  const option =
+  quarto.options[
+  quarto.selectedIndex
+  ]
+
+  const payload = {
+
+    nome:
+    nome.value,
+
+    cpf:
+    cpf.value,
+
+    whatsapp:
+    whatsapp.value,
+
+    possui_carro:
+    carro.value==="Sim",
+
+    quarto_id:
+    option.value,
+
+    quarto_nome:
+    option.dataset.nome,
+
+    checkin:
+    checkin.value,
+
+    checkout:
+    checkout.value,
+
+    status:
+    status.value,
+
+    valor:
+    Number(option.dataset.valor),
+
+    observacoes:
+    obs.value
+
+  }
+
+  const {
+    error
+  } = await supabase
+
+  .from("hotel_reservas")
+  .insert(payload)
+
+  if(error){
+
+    loading(false)
+
+    alert("Erro ao salvar")
+
+    console.log(error)
+
+    return
+
+  }
+
+  await supabase
+
+  .from("hotel_quartos")
+
+  .update({
+    status:"Reservado"
+  })
+
+  .eq("id",option.value)
+
+  fecharModal()
+
+  carregarReservas()
+  carregarQuartos()
+
+  loading(false)
+
+  alert("Reserva cadastrada!")
+
+}
+
+// =========================================
+// CARREGAR RESERVAS
+// =========================================
+
+async function carregarReservas(){
+
+  loading(true)
+
+  const {
+    data,
+    error
+  } = await supabase
+
+  .from("hotel_reservas")
+  .select("*")
+  .order("created_at",{ascending:false})
+
+  loading(false)
+
+  if(error){
+
+    console.log(error)
+    return
+
+  }
+
+  tbody.innerHTML=""
+
+  let total=0
+  let faturamento=0
+  let pendentes=0
+  let checkinHoje=0
+
+  const hoje =
+  new Date()
+  .toISOString()
+  .split('T')[0]
+
+  data.forEach(r=>{
+
+    total++
+
+    faturamento +=
+    Number(r.valor || 0)
+
+    if(r.status==="Pendente")
+    pendentes++
+
+    if(r.checkin===hoje)
+    checkinHoje++
+
+    tbody.innerHTML+=`
+
+      <tr>
+
+        <td>${r.nome}</td>
+
+        <td>${r.cpf}</td>
+
+        <td>${r.whatsapp}</td>
+
+        <td>${r.quarto_nome}</td>
+
+        <td>${r.checkin}</td>
+
+        <td>
+
+          <select
+          onchange="
+          alterarStatus(
+          '${r.id}',
+          this.value
+          )">
+
+            <option
+            ${r.status==="Pendente"
+            ?'selected':''}>
+
+            Pendente
+
+            </option>
+
+            <option
+            ${r.status==="Confirmado"
+            ?'selected':''}>
+
+            Confirmado
+
+            </option>
+
+            <option
+            ${r.status==="Cancelado"
+            ?'selected':''}>
+
+            Cancelado
+
+            </option>
+
+          </select>
+
+        </td>
+
+        <td>
+
+          ${Number(r.valor)
+          .toLocaleString(
+          'pt-BR',
+          {
+            style:'currency',
+            currency:'BRL'
+          })}
+
+        </td>
+
+      </tr>
+
+    `
+
+  })
+
+  totalReservas.innerHTML=
+  total
+
+  faturamento.innerHTML=
+
+  faturamento.toLocaleString(
+  'pt-BR',
+  {
+    style:'currency',
+    currency:'BRL'
+  })
+
+  pendentesHoje.innerHTML=
+  pendentes
+
+  checkinHoje.innerHTML=
+  checkinHoje
+
+}
+
+// =========================================
+// ALTERAR STATUS
+// =========================================
+
+async function alterarStatus(
+id,
+status
+){
+
+  await supabase
+
+  .from("hotel_reservas")
+
+  .update({
+    status
+  })
+
+  .eq("id",id)
+
+}
+
+// =========================================
+// CALENDARIO PREMIUM
+// =========================================
+
+async function renderCalendar(){
+
+  const {
+    data
+  } = await supabase
+
+  .from("hotel_reservas")
+  .select("*")
 
   const diasSemana =
 
@@ -1137,14 +1501,42 @@ function renderCalendar(){
   diasSemana.forEach(d=>{
 
     calendar.innerHTML+=`
+
       <div class="dayName">
         ${d}
       </div>
+
     `
 
   })
 
   for(let i=1;i<=31;i++){
+
+    let reservasDia=''
+
+    data.forEach(r=>{
+
+      if(!r.checkin) return
+
+      const dia =
+      new Date(r.checkin)
+      .getDate()
+
+      if(dia===i){
+
+        reservasDia +=`
+
+        <div class="reservaMini">
+
+          ${r.quarto_nome}
+
+        </div>
+
+        `
+
+      }
+
+    })
 
     calendar.innerHTML+=`
 
@@ -1152,17 +1544,7 @@ function renderCalendar(){
 
         <strong>${i}</strong>
 
-        ${
-          i===12
-          ?'<div class="reservaMini">Suíte Master</div>'
-          :''
-        }
-
-        ${
-          i===18
-          ?'<div class="reservaMini">Luxo Casal</div>'
-          :''
-        }
+        ${reservasDia}
 
       </div>
 
@@ -1172,170 +1554,36 @@ function renderCalendar(){
 
 }
 
-// =======================================
-// BUSCAR RESERVAS
-// =======================================
+// =========================================
+// REALTIME
+// =========================================
 
-async function carregarReservas(){
+supabase
+.channel("hotel")
 
-  const {
-    data,
-    error
-  } = await supabase
-
-  .from("hotel_reservas")
-  .select("*")
-  .order("created_at",{ascending:false})
-
-  if(error){
-
-    console.log(error)
-    return
-
-  }
-
-  tbody.innerHTML=""
-
-  let total = 0
-  let faturamento = 0
-
-  data.forEach(r=>{
-
-    total++
-
-    faturamento +=
-    Number(r.valor || 0)
-
-    tbody.innerHTML+=`
-
-      <tr>
-
-        <td>${r.nome}</td>
-
-        <td>${r.cpf}</td>
-
-        <td>${r.whatsapp}</td>
-
-        <td>${r.quarto}</td>
-
-        <td>${r.checkin}</td>
-
-        <td>
-
-          <span class="
-          badge
-          ${r.status.toLowerCase()}
-          ">
-
-            ${r.status}
-
-          </span>
-
-        </td>
-
-        <td>
-          R$ ${Number(r.valor || 0)
-          .toFixed(2)}
-        </td>
-
-      </tr>
-
-    `
-
-  })
-
-  totalReservas.innerHTML =
-  total
-
-  faturamento.innerHTML =
-  faturamento.toLocaleString(
-  "pt-BR",
-  {
-    style:"currency",
-    currency:"BRL"
-  })
-
-}
-
-// =======================================
-// SALVAR
-// =======================================
-
-async function salvarReserva(){
-
-  const quartoSelecionado =
-  quartos.find(q=>
-  q.nome===quarto.value
-  )
-
-  const valor =
-  quartoSelecionado
-  ? quartoSelecionado.valor
-  : 0
-
-  const payload = {
-
-    nome:nome.value,
-    cpf:cpf.value,
-    whatsapp:whatsapp.value,
-
-    possui_carro:
-    carro.value,
-
-    quarto:quarto.value,
-
-    checkin:
-    checkin.value,
-
-    checkout:
-    checkout.value,
-
-    status:
-    status.value,
-
-    observacoes:
-    obs.value,
-
-    valor
-
-  }
-
-  const {
-    error
-  } = await supabase
-
-  .from("hotel_reservas")
-  .insert(payload)
-
-  if(error){
-
-    alert(
-      "Erro ao salvar"
-    )
-
-    console.log(error)
-
-    return
-
-  }
-
-  fecharModal()
+.on(
+"postgres_changes",
+{
+  event:"*",
+  schema:"public",
+  table:"hotel_reservas"
+},
+()=>{
 
   carregarReservas()
+  renderCalendar()
 
-  alert(
-    "Reserva cadastrada!"
-  )
+})
 
-}
+.subscribe()
 
-// =======================================
+// =========================================
 // INIT
-// =======================================
+// =========================================
 
-renderRooms()
-renderCalendar()
+carregarQuartos()
 carregarReservas()
+renderCalendar()
 
 </script>
 
