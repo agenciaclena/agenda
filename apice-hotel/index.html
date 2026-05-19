@@ -2440,83 +2440,83 @@ async function carregarRooms(){
   quartosDisponiveis.innerHTML =
   quartosData.length
 
-  quartosData.forEach(q=>{
+quartosData.forEach(q=>{
 
-    let status =
-    "disponivel"
+  let status =
+  "disponivel"
 
-    let texto =
-    "Disponível"
+  let texto =
+  "Disponível"
 
-    let reservaAtual = null
+  let reservaAtual = null
 
-    data.forEach(r=>{
+  reservas.forEach(r=>{
 
-      if(
-        Number(r.quarto_numero)
-        !== i
-      ) return
+    if(
+      Number(r.quarto_numero)
+      !== Number(q.numero)
+    ) return
 
-      const entrada =
-      new Date(r.entrada)
+    const entrada =
+    new Date(r.entrada)
 
-      const saida =
-      new Date(r.saida)
+    const saida =
+    new Date(r.saida)
 
-      const liberacao =
-      new Date(saida)
+    const liberacao =
+    new Date(saida)
 
-      liberacao.setHours(
-      liberacao.getHours()+1
+    liberacao.setHours(
+    liberacao.getHours()+1
+    )
+
+    // =========================
+    // OCUPADO
+    // =========================
+
+    if(
+      agora >= entrada &&
+      agora <= saida
+    ){
+
+      status="ocupado"
+
+      texto="Ocupado"
+
+      reservaAtual=r
+
+    }
+
+    // =========================
+    // RESERVADO
+    // =========================
+
+    else if(
+
+      agora < entrada ||
+
+      (
+        agora > saida &&
+        agora < liberacao
       )
 
-      // =========================
-      // OCUPADO AGORA
-      // =========================
+    ){
 
-      if(
-        agora >= entrada &&
-        agora <= saida
-      ){
+      if(status!=="ocupado"){
 
-        status="ocupado"
+        status="reservado"
 
-        texto="Ocupado"
+        texto="Reservado"
 
         reservaAtual=r
 
       }
 
-      // =========================
-      // RESERVADO FUTURO
-      // =========================
+    }
 
-      else if(
+  })
 
-        agora < entrada ||
-
-        (
-          agora > saida &&
-          agora < liberacao
-        )
-
-      ){
-
-        if(status!=="ocupado"){
-
-          status="reservado"
-
-          texto="Reservado"
-
-          reservaAtual=r
-
-        }
-
-      }
-
-    })
-
-    rooms.innerHTML+=`
+  rooms.innerHTML+=`
 
       <div class="
       room
@@ -2525,13 +2525,74 @@ async function carregarRooms(){
 
         <div>
 
-          <h3>
-            Quarto ${i}
-          </h3>
+  <h3>
+  ${q.nome}
+</h3>
 
-          <p>
-            HOTEL APICE
-          </p>
+<p>
+
+Quarto ${q.numero}
+
+</p>
+
+<div style="
+margin-top:10px;
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+">
+
+  <span style="
+  background:#efe2d2;
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:11px;
+  font-weight:700;
+  ">
+
+  ${q.tipo || 'Standard'}
+
+  </span>
+
+  <span style="
+  background:#efe2d2;
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:11px;
+  font-weight:700;
+  ">
+
+  ${q.camas || 0} camas
+
+  </span>
+
+</div>
+
+<div style="
+margin-top:12px;
+font-size:12px;
+display:flex;
+flex-direction:column;
+gap:4px;
+color:#6b5b4c;
+">
+
+  <span>
+    TV:
+    ${q.tv ? 'Sim' : 'Não'}
+  </span>
+
+  <span>
+    Ar:
+    ${q.ar ? 'Sim' : 'Não'}
+  </span>
+
+  <span>
+    Frigobar:
+    ${q.frigobar ? 'Sim' : 'Não'}
+  </span>
+
+</div>
 
         </div>
 
@@ -2539,9 +2600,9 @@ async function carregarRooms(){
 
           <div class="roomPrice">
 
-            ${Number(
-            180 + (i*2)
-            ).toLocaleString(
+${Number(
+q.valor || 0
+).toLocaleString(
             'pt-BR',
             {
               style:'currency',
@@ -2919,18 +2980,22 @@ Por favor confirme sua reserva.`
 
 </div>
 
-            <br>
+<div>
 
-            ${Number(
-            r.valor || 0
-            ).toLocaleString(
-            'pt-BR',
-            {
-              style:'currency',
-              currency:'BRL'
-            })}
+  <strong>Valor</strong>
 
-          </div>
+  <br>
+
+  ${Number(
+  r.valor || 0
+  ).toLocaleString(
+  'pt-BR',
+  {
+    style:'currency',
+    currency:'BRL'
+  })}
+
+</div>
 
         </div>
 
