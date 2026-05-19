@@ -415,9 +415,9 @@ ROOMS
   display:grid;
 
   grid-template-columns:
-  repeat(6,minmax(140px,1fr));
+  repeat(6,1fr);
 
-  gap:12px;
+  gap:16px;
 
   max-height:760px;
 
@@ -461,19 +461,17 @@ ROOMS
   border:
   1px solid #eadfce;
 
-  border-radius:18px;
+  border-radius:22px;
 
-  padding:14px;
+  padding:18px;
 
-  min-height:185px;
+  min-height:220px;
 
   display:flex;
   flex-direction:column;
   justify-content:space-between;
 
   transition:.2s;
-
-  overflow:hidden;
 
 }
 
@@ -524,9 +522,7 @@ ROOMS
 
 .room h3{
 
-  font-size:15px;
-
-  line-height:1.2;
+  font-size:18px;
 
 }
 
@@ -542,10 +538,9 @@ ROOMS
 
 .roomPrice{
 
-  margin-top:10px;
+  margin-top:14px;
 
-  font-size:18px;
-
+  font-size:28px;
   font-weight:900;
 
   color:var(--primary);
@@ -2039,85 +2034,8 @@ async function carregarRooms(){
 
     })
 
-rooms.innerHTML+=`
+    rooms.innerHTML+=`
 
-<div class="
-room
-${status}
-">
-
-  <div>
-
-    <h3>
-      Quarto ${i}
-    </h3>
-
-    <p>
-      HOTEL APICE
-    </p>
-
-    <div style="
-    margin-top:10px;
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    font-size:11px;
-    color:#6b5b4c;
-    ">
-
-      <span>
-        🛏️ ${
-          i <= 80
-          ? "Casal"
-          : `${(i % 3)+1} Camas`
-        }
-      </span>
-
-      <span>
-        📺 TV
-      </span>
-
-      <span>
-        ❄️ Ar
-      </span>
-
-      <span>
-        🧊 Frigobar
-      </span>
-
-    </div>
-
-  </div>
-
-  <div>
-
-    <div class="roomPrice">
-
-      ${Number(
-      180 + (i*2)
-      ).toLocaleString(
-      'pt-BR',
-      {
-        style:'currency',
-        currency:'BRL'
-      })}
-
-    </div>
-
-    <div class="
-    badge
-    ${status}
-    ">
-
-      ${texto}
-
-    </div>
-
-  </div>
-
-</div>
-
-`
       <div class="
       room
       ${status}
