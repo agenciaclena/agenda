@@ -412,12 +412,45 @@ ROOMS
 
 .rooms{
 
-  display:flex;
-  flex-direction:column;
+  display:grid;
+
+  grid-template-columns:
+  repeat(6,1fr);
+
   gap:16px;
 
-  max-height:700px;
+  max-height:760px;
+
   overflow:auto;
+
+  padding-right:6px;
+
+}
+
+@media(max-width:1400px){
+
+  .rooms{
+    grid-template-columns:
+    repeat(4,1fr);
+  }
+
+}
+
+@media(max-width:1000px){
+
+  .rooms{
+    grid-template-columns:
+    repeat(3,1fr);
+  }
+
+}
+
+@media(max-width:700px){
+
+  .rooms{
+    grid-template-columns:
+    repeat(2,1fr);
+  }
 
 }
 
@@ -428,9 +461,62 @@ ROOMS
   border:
   1px solid #eadfce;
 
-  border-radius:24px;
+  border-radius:22px;
 
   padding:18px;
+
+  min-height:220px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  transition:.2s;
+
+}
+
+.room:hover{
+
+  transform:translateY(-4px);
+
+}
+
+.room.disponivel{
+
+  background:
+  linear-gradient(
+  180deg,
+  #ffffff,
+  #f6fff8
+  );
+
+}
+
+.room.reservado{
+
+  background:
+  linear-gradient(
+  180deg,
+  #fff7ea,
+  #fff0de
+  );
+
+  border:
+  1px solid #ffcd73;
+
+}
+
+.room.ocupado{
+
+  background:
+  linear-gradient(
+  180deg,
+  #fff0f0,
+  #ffe0e0
+  );
+
+  border:
+  1px solid #ff9b9b;
 
 }
 
@@ -479,20 +565,29 @@ ROOMS
 
 }
 
-.badge.disponível{
+.badge.disponivel{
 
   background:#e8f8ef;
-  color:var(--green);
+
+  color:#18995a;
+
+}
+
+.badge.reservado{
+
+  background:#fff0d9;
+
+  color:#d88700;
 
 }
 
 .badge.ocupado{
 
-  background:#fdeaea;
-  color:var(--red);
+  background:#ffe0e0;
+
+  color:#d94b4b;
 
 }
-
 /* =========================
 TABLE
 ========================= */
@@ -1847,39 +1942,181 @@ async function carregarRooms(){
 
   rooms.innerHTML=""
 
-  for(let i=1;i<=20;i++){
+  const agora =
+  new Date()
+
+  const {
+    data
+  } = await hotelSupabase
+
+  .from("hotel_reservas")
+
+  .select("*")
+
+  .eq(
+  "hotel",
+  "HOTEL APICE"
+  )
+
+  for(let i=1;i<=200;i++){
+
+    let status =
+    "disponivel"
+
+    let texto =
+    "Disponível"
+
+    let reservaAtual = null
+
+    data.forEach(r=>{
+
+      if(
+        Number(r.quarto_numero)
+        !== i
+      ) return
+
+      const entrada =
+      new Date(r.entrada)
+
+      const saida =
+      new Date(r.saida)
+
+      const liberacao =
+      new Date(saida)
+
+      liberacao.setHours(
+      liberacao.getHours()+1
+      )
+
+      // =========================
+      // OCUPADO AGORA
+      // =========================
+
+      if(
+        agora >= entrada &&
+        agora <= saida
+      ){
+
+        status="ocupado"
+
+        texto="Ocupado"
+
+        reservaAtual=r
+
+      }
+
+      // =========================
+      // RESERVADO FUTURO
+      // =========================
+
+      else if(
+
+        agora < entrada ||
+
+        (
+          agora > saida &&
+          agora < liberacao
+        )
+
+      ){
+
+        if(status!=="ocupado"){
+
+          status="reservado"
+
+          texto="Reservado"
+
+          reservaAtual=r
+
+        }
+
+      }
+
+    })
 
     rooms.innerHTML+=`
 
-      <div class="room">
+      <div class="
+      room
+      ${status}
+      ">
 
-        <h3>
-          Quarto ${i}
-        </h3>
+        <div>
 
-        <p>
-          HOTEL APICE
-        </p>
+          <h3>
+            Quarto ${i}
+          </h3>
 
-        <div class="roomPrice">
-
-          ${Number(
-          180 + (i*2)
-          ).toLocaleString(
-          'pt-BR',
-          {
-            style:'currency',
-            currency:'BRL'
-          })}
+          <p>
+            HOTEL APICE
+          </p>
 
         </div>
 
-        <div class="
-        badge
-        disponível
-        ">
+        <div>
 
-          Disponível
+          <div class="roomPrice">
+
+            ${Number(
+            180 + (i*2)
+            ).toLocaleString(
+            'pt-BR',
+            {
+              style:'currency',
+              currency:'BRL'
+            })}
+
+          </div>
+
+          <div class="
+          badge
+          ${status}
+          ">
+
+            ${texto}
+
+          </div>
+
+          ${
+            reservaAtual
+            ?
+
+            `
+
+            <div style="
+            margin-top:10px;
+            font-size:11px;
+            color:#6b5b4c;
+            line-height:1.5;
+            ">
+
+            ${
+              status==="ocupado"
+              ?
+
+              `Até
+              ${new Date(
+              reservaAtual.saida
+              ).toLocaleString('pt-BR')}`
+
+              :
+
+              `Entrada:
+              ${new Date(
+              reservaAtual.entrada
+              ).toLocaleString('pt-BR')}`
+
+            }
+
+            </div>
+
+            `
+
+            :
+
+            ''
+
+          }
 
         </div>
 
@@ -1890,7 +2127,6 @@ async function carregarRooms(){
   }
 
 }
-
 // =========================================
 // INIT
 // =========================================
