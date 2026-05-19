@@ -14,46 +14,38 @@ user-scalable=no,
 viewport-fit=cover
 ">
 
-<title>Hotel Premium • Reservas</title>
+<meta
+name="theme-color"
+content="#7a5c43">
 
-<meta name="theme-color" content="#7a5c43">
+<title>Hotel Premium</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link href="
-https://fonts.googleapis.com/css2?
-family=Inter:wght@400;500;600;700;800;900&
-family=Cormorant+Garamond:wght@500;600;700
-&display=swap"
-rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 
-<script src="
-https://cdn.jsdelivr.net/npm/
-@supabase/supabase-js@2
-"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
 :root{
 
-  --bg:#f5f1eb;
+  --bg:#f4efe8;
   --card:#ffffff;
-  --line:#eadfce;
+  --line:#e7dbca;
 
   --primary:#7a5c43;
   --primary2:#9b7653;
 
-  --text:#2c241d;
-  --muted:#7a6d60;
+  --text:#2d241d;
+  --muted:#7c6b5c;
 
-  --green:#169653;
+  --green:#1e9b57;
   --red:#d64545;
-  --orange:#dd9627;
+  --orange:#dd9726;
 
   --shadow:
   0 10px 40px rgba(0,0,0,.08);
-
-  --radius:26px;
 
 }
 
@@ -72,9 +64,10 @@ body{
 
   overflow:hidden;
 
+  background:var(--bg);
+
   font-family:'Inter',sans-serif;
 
-  background:var(--bg);
   color:var(--text);
 
 }
@@ -94,8 +87,8 @@ SIDEBAR
   background:
   linear-gradient(
   180deg,
-  #efe5d7,
-  #f7f1e8
+  #efe3d3,
+  #f8f2ea
   );
 
   border-right:
@@ -109,7 +102,7 @@ SIDEBAR
 
 .logo{
 
-  font-size:44px;
+  font-size:48px;
 
   font-family:
   'Cormorant Garamond',
@@ -125,9 +118,9 @@ SIDEBAR
 
   margin-top:6px;
 
-  font-size:13px;
-
   color:var(--muted);
+
+  font-size:13px;
 
 }
 
@@ -136,11 +129,11 @@ SIDEBAR
   width:100%;
   height:60px;
 
+  margin-top:28px;
+
   border:none;
 
   border-radius:20px;
-
-  margin-top:28px;
 
   background:
   linear-gradient(
@@ -151,8 +144,8 @@ SIDEBAR
 
   color:#fff;
 
-  font-size:15px;
   font-weight:800;
+  font-size:15px;
 
   cursor:pointer;
 
@@ -181,14 +174,12 @@ SIDEBAR
 
   padding:18px;
 
-  box-shadow:
-  0 5px 20px rgba(0,0,0,.03);
-
 }
 
 .menuCard span{
 
   font-size:13px;
+
   color:var(--muted);
 
 }
@@ -197,7 +188,7 @@ SIDEBAR
 
   margin-top:10px;
 
-  font-size:30px;
+  font-size:32px;
 
 }
 
@@ -217,13 +208,9 @@ MAIN
 
   padding:30px;
 
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
 }
 
-.topLeft h1{
+.topbar h1{
 
   font-size:42px;
 
@@ -233,9 +220,10 @@ MAIN
 
 }
 
-.topLeft p{
+.topbar p{
 
   margin-top:6px;
+
   color:var(--muted);
 
 }
@@ -276,13 +264,14 @@ CARDS
 .card span{
 
   font-size:13px;
+
   color:var(--muted);
 
 }
 
 .card h2{
 
-  margin-top:12px;
+  margin-top:10px;
 
   font-size:34px;
 
@@ -369,7 +358,7 @@ CALENDAR
 
 .day{
 
-  min-height:95px;
+  min-height:90px;
 
   background:#faf7f3;
 
@@ -384,7 +373,7 @@ CALENDAR
 
 .day strong{
 
-  font-size:15px;
+  font-size:14px;
 
 }
 
@@ -434,14 +423,6 @@ ROOMS
 
 }
 
-.roomTop{
-
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-
-}
-
 .room h3{
 
   font-size:18px;
@@ -450,17 +431,17 @@ ROOMS
 
 .room p{
 
-  margin-top:5px;
-
-  font-size:13px;
+  margin-top:6px;
 
   color:var(--muted);
+
+  font-size:13px;
 
 }
 
 .roomPrice{
 
-  margin-top:16px;
+  margin-top:14px;
 
   font-size:30px;
   font-weight:900;
@@ -480,6 +461,8 @@ ROOMS
 
   border-radius:999px;
 
+  margin-top:14px;
+
   font-size:12px;
   font-weight:800;
 
@@ -494,7 +477,7 @@ ROOMS
 
 .badge.reservado{
 
-  background:#fff5e6;
+  background:#fff5e5;
   color:var(--orange);
 
 }
@@ -535,13 +518,14 @@ TABLE
 table{
 
   width:100%;
+
   border-collapse:collapse;
 
 }
 
 thead{
 
-  background:#f6f1e8;
+  background:#f5eee5;
 
 }
 
@@ -562,7 +546,7 @@ td{
   padding:18px;
 
   border-top:
-  1px solid #f0e8de;
+  1px solid #f1e8dd;
 
   font-size:14px;
 
@@ -572,7 +556,7 @@ td select{
 
   border:none;
 
-  background:#f6eee3;
+  background:#f5eee5;
 
   border-radius:12px;
 
@@ -608,7 +592,7 @@ MODAL
 
 .modal{
 
-  width:min(96vw,800px);
+  width:min(96vw,820px);
 
   background:#fff;
 
@@ -623,7 +607,7 @@ MODAL
 
 .modal h2{
 
-  font-size:44px;
+  font-size:42px;
 
   font-family:
   'Cormorant Garamond',
@@ -661,15 +645,14 @@ MODAL
 .group label{
 
   font-size:13px;
-  font-weight:800;
 
-  color:#655749;
+  font-weight:800;
 
 }
 
 .group input,
-.group select,
-.group textarea{
+.group textarea,
+.group select{
 
   width:100%;
 
@@ -693,6 +676,7 @@ MODAL
 textarea{
 
   resize:none;
+
   min-height:120px;
 
 }
@@ -725,9 +709,7 @@ textarea{
 
 .btnCancel{
 
-  background:#ede4d8;
-
-  color:#4c4033;
+  background:#eee4d7;
 
 }
 
@@ -771,9 +753,9 @@ LOADING
   width:190px;
   height:190px;
 
-  border-radius:34px;
-
   background:#fff;
+
+  border-radius:34px;
 
   display:flex;
   flex-direction:column;
@@ -826,9 +808,7 @@ LOADING
   }
 
   .content{
-
     grid-template-columns:1fr;
-
   }
 
 }
@@ -848,7 +828,7 @@ LOADING
     grid-template-columns:1fr;
   }
 
-  .topLeft h1{
+  .topbar h1{
     font-size:32px;
   }
 
@@ -930,17 +910,13 @@ LOADING
 
   <div class="topbar">
 
-    <div class="topLeft">
+    <h1>
+      Painel de Reservas
+    </h1>
 
-      <h1>
-        Painel de Reservas
-      </h1>
-
-      <p>
-        Controle premium de hospedagens
-      </p>
-
-    </div>
+    <p>
+      Controle premium de hospedagens
+    </p>
 
   </div>
 
@@ -1089,8 +1065,7 @@ LOADING
           Nome Completo
         </label>
 
-        <input
-        id="nome">
+        <input id="nome">
 
       </div>
 
@@ -1198,8 +1173,7 @@ LOADING
           Observações
         </label>
 
-        <textarea
-        id="obs"></textarea>
+        <textarea id="obs"></textarea>
 
       </div>
 
@@ -1263,7 +1237,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_JZ03cxyjSWuUKk_LBMdbbA_LmcOgWC9"
 
-const supabase =
+const hotelSupabase =
 window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
@@ -1409,7 +1383,7 @@ async function carregarQuartos(){
   const {
     data,
     error
-  } = await supabase
+  } = await hotelSupabase
 
   .from("hotel_quartos")
   .select("*")
@@ -1452,21 +1426,13 @@ async function carregarQuartos(){
 
       <div class="room">
 
-        <div class="roomTop">
+        <h3>
+          ${q.nome}
+        </h3>
 
-          <div>
-
-            <h3>
-              ${q.nome}
-            </h3>
-
-            <p>
-              ${q.descricao || ''}
-            </p>
-
-          </div>
-
-        </div>
+        <p>
+          ${q.descricao || ''}
+        </p>
 
         <div class="roomPrice">
 
@@ -1552,14 +1518,14 @@ async function salvarReserva(){
 
   const {
     error
-  } = await supabase
+  } = await hotelSupabase
 
   .from("hotel_reservas")
   .insert(payload)
 
-  if(error){
+  loading(false)
 
-    loading(false)
+  if(error){
 
     console.log(error)
 
@@ -1571,26 +1537,10 @@ async function salvarReserva(){
 
   }
 
-  await supabase
-
-  .from("hotel_quartos")
-
-  .update({
-    status:"Reservado"
-  })
-
-  .eq(
-  "id",
-  option.value
-  )
-
   fecharModal()
 
   carregarReservas()
-  carregarQuartos()
   renderCalendar()
-
-  loading(false)
 
   alert(
   "Reserva criada!"
@@ -1604,12 +1554,10 @@ async function salvarReserva(){
 
 async function carregarReservas(){
 
-  loading(true)
-
   const {
     data,
     error
-  } = await supabase
+  } = await hotelSupabase
 
   .from("hotel_reservas")
   .select("*")
@@ -1618,8 +1566,6 @@ async function carregarReservas(){
   {
     ascending:false
   })
-
-  loading(false)
 
   if(error){
 
@@ -1763,7 +1709,7 @@ id,
 status
 ){
 
-  await supabase
+  await hotelSupabase
 
   .from("hotel_reservas")
 
@@ -1783,7 +1729,7 @@ async function renderCalendar(){
 
   const {
     data
-  } = await supabase
+  } = await hotelSupabase
 
   .from("hotel_reservas")
   .select("*")
@@ -1866,7 +1812,7 @@ async function renderCalendar(){
 // REALTIME
 // =========================================
 
-supabase
+hotelSupabase
 
 .channel("hotel")
 
