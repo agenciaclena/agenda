@@ -1583,9 +1583,11 @@ function loading(show=true){
 // MODAL
 // =========================================
 
-function abrirModal(){
+async function abrirModal(){
 
   overlay.style.display="flex"
+
+  await carregarQuartosDisponiveis()
 
 }
 
@@ -1729,8 +1731,21 @@ async function carregarQuartosDisponiveis(){
 
   quarto.innerHTML=""
 
-  if(!entradaData || !saidaData)
+if(!entradaData || !saidaData){
+
+  quarto.innerHTML=`
+
+  <option>
+
+  Selecione entrada e saída
+
+  </option>
+
+  `
+
   return
+
+}
 
   // =====================================
   // BUSCAR QUARTOS
