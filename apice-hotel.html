@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1,
+maximum-scale=1,
+user-scalable=no,
+viewport-fit=cover"/>
+
+<title>Hotel • Reservas Premium</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root{
+
+  --bg:#f6f2eb;
+  --card:#ffffff;
+  --line:#e7ddd0;
+
+  --primary:#7a5c43;
+  --primary2:#9b7653;
+
+  --text:#2d241d;
+  --muted:#7b6b5d;
+
+  --green:#1f8b4c;
+  --red:#d64545;
+  --orange:#e29b2d;
+
+  --shadow:
+  0 10px 35px rgba(0,0,0,.08);
+
+  --radius:24px;
+
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+body{
+  display:flex;
+}
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+
+  width:300px;
+  background:#efe7dc;
+  border-right:1px solid var(--line);
+
+  padding:26px;
+  overflow:auto;
+
+}
+
+.logo{
+
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;
+  font-weight:700;
+  color:var(--primary);
+
+}
+
+.sub{
+
+  margin-top:5px;
+  color:var(--muted);
+  font-size:14px;
+
+}
+
+.btnNova{
+
+  margin-top:28px;
+  width:100%;
+  border:none;
+  background:linear-gradient(
+  135deg,
+  var(--primary),
+  var(--primary2)
+  );
+
+  color:#fff;
+  height:58px;
+  border-radius:18px;
+
+  font-size:15px;
+  font-weight:700;
+
+  cursor:pointer;
+  box-shadow:var(--shadow);
+
+}
+
+.menu{
+
+  margin-top:30px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+}
+
+.menuItem{
+
+  background:#fff;
+  border:1px solid var(--line);
+
+  border-radius:18px;
+
+  padding:16px;
+
+}
+
+.menuItem h3{
+
+  font-size:15px;
+  margin-bottom:6px;
+
+}
+
+.menuItem p{
+
+  font-size:13px;
+  color:var(--muted);
+
+}
+
+/* =========================
+MAIN
+========================= */
+
+.main{
+
+  flex:1;
+  overflow:auto;
+
+}
+
+.topbar{
+
+  padding:28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+}
+
+.topTitle h1{
+
+  font-size:34px;
+  font-family:'Cormorant Garamond',serif;
+
+}
+
+.topTitle p{
+
+  color:var(--muted);
+  margin-top:4px;
+
+}
+
+.cards{
+
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fit,minmax(220px,1fr));
+
+  gap:18px;
+
+  padding:
+  0 28px 28px;
+
+}
+
+.card{
+
+  background:var(--card);
+  border:1px solid var(--line);
+
+  border-radius:var(--radius);
+
+  padding:22px;
+
+  box-shadow:var(--shadow);
+
+}
+
+.card span{
+
+  color:var(--muted);
+  font-size:13px;
+
+}
+
+.card h2{
+
+  margin-top:12px;
+  font-size:32px;
+
+}
+
+.content{
+
+  display:grid;
+
+  grid-template-columns:
+  1.2fr .8fr;
+
+  gap:28px;
+
+  padding:
+  0 28px 28px;
+
+}
+
+.calendarBox,
+.roomsBox{
+
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:30px;
+
+  padding:26px;
+
+  box-shadow:var(--shadow);
+
+}
+
+.sectionTitle{
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:25px;
+
+}
+
+.sectionTitle h2{
+
+  font-family:'Cormorant Garamond',serif;
+  font-size:34px;
+
+}
+
+.calendar{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(7,1fr);
+
+  gap:12px;
+
+}
+
+.dayName{
+
+  text-align:center;
+  font-size:13px;
+  font-weight:700;
+  color:var(--muted);
+
+}
+
+.day{
+
+  background:#faf7f3;
+  border:1px solid #ede4d8;
+
+  min-height:95px;
+
+  border-radius:18px;
+
+  padding:12px;
+
+  position:relative;
+
+}
+
+.day strong{
+
+  font-size:15px;
+
+}
+
+.reservaMini{
+
+  margin-top:10px;
+
+  background:#fff;
+
+  border-left:4px solid
+  var(--primary);
+
+  padding:6px;
+
+  border-radius:10px;
+
+  font-size:11px;
+
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+
+}
+
+/* =========================
+ROOMS
+========================= */
+
+.room{
+
+  background:#faf7f3;
+  border:1px solid #eadfce;
+
+  border-radius:24px;
+
+  padding:18px;
+
+  margin-bottom:18px;
+
+}
+
+.roomHeader{
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+}
+
+.room h3{
+
+  font-size:18px;
+
+}
+
+.room p{
+
+  margin-top:6px;
+  color:var(--muted);
+  font-size:13px;
+
+}
+
+.price{
+
+  margin-top:16px;
+
+  font-size:28px;
+  font-weight:800;
+
+  color:var(--primary);
+
+}
+
+.status{
+
+  margin-top:14px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:
+  8px 14px;
+
+  border-radius:999px;
+
+  font-size:12px;
+  font-weight:700;
+
+}
+
+.status.disponivel{
+
+  background:#e9f7ef;
+  color:var(--green);
+
+}
+
+.status.ocupado{
+
+  background:#fdecec;
+  color:var(--red);
+
+}
+
+.status.reservado{
+
+  background:#fff6e7;
+  color:var(--orange);
+
+}
+
+/* =========================
+TABELA
+========================= */
+
+.tableWrap{
+
+  padding:0 28px 28px;
+
+}
+
+.tableBox{
+
+  background:#fff;
+  border:1px solid var(--line);
+
+  border-radius:30px;
+
+  overflow:hidden;
+
+  box-shadow:var(--shadow);
+
+}
+
+table{
+
+  width:100%;
+  border-collapse:collapse;
+
+}
+
+thead{
+
+  background:#f7f1e8;
+
+}
+
+th{
+
+  text-align:left;
+  padding:18px;
+  font-size:13px;
+
+  color:#6b5b4d;
+
+}
+
+td{
+
+  padding:18px;
+  border-top:1px solid #f0e7db;
+  font-size:14px;
+
+}
+
+.badge{
+
+  padding:
+  8px 14px;
+
+  border-radius:999px;
+
+  font-size:12px;
+  font-weight:700;
+
+}
+
+.badge.confirmado{
+
+  background:#e9f7ef;
+  color:var(--green);
+
+}
+
+.badge.pendente{
+
+  background:#fff5e5;
+  color:#b97909;
+
+}
+
+.badge.cancelado{
+
+  background:#fdecec;
+  color:var(--red);
+
+}
+
+select{
+
+  border:none;
+  background:#f5eee5;
+
+  padding:
+  10px 14px;
+
+  border-radius:12px;
+
+  font-weight:600;
+  outline:none;
+
+}
+
+/* =========================
+MODAL
+========================= */
+
+.overlay{
+
+  position:fixed;
+  inset:0;
+
+  background:
+  rgba(0,0,0,.45);
+
+  backdrop-filter:blur(8px);
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  z-index:999;
+
+}
+
+.modal{
+
+  width:min(95vw,700px);
+
+  background:#fff;
+
+  border-radius:30px;
+
+  padding:30px;
+
+  max-height:92vh;
+  overflow:auto;
+
+  animation:show .25s ease;
+
+}
+
+@keyframes show{
+
+  from{
+    transform:translateY(20px);
+    opacity:0;
+  }
+
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+
+}
+
+.modal h2{
+
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px;
+
+  margin-bottom:25px;
+
+}
+
+.form{
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+
+}
+
+.formGroup{
+
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+
+}
+
+.formGroup.full{
+
+  grid-column:1/-1;
+}
+
+label{
+
+  font-size:13px;
+  font-weight:700;
+
+  color:#655648;
+
+}
+
+input,
+textarea,
+select{
+
+  width:100%;
+
+  border:1px solid #e8dccd;
+
+  background:#faf7f3;
+
+  min-height:54px;
+
+  border-radius:16px;
+
+  padding:14px;
+
+  font-size:15px;
+
+  outline:none;
+
+}
+
+textarea{
+
+  resize:none;
+  min-height:120px;
+
+}
+
+.modalActions{
+
+  margin-top:28px;
+
+  display:flex;
+  justify-content:flex-end;
+  gap:12px;
+
+}
+
+.btn{
+
+  height:54px;
+  padding:0 24px;
+
+  border:none;
+  border-radius:16px;
+
+  font-weight:700;
+  cursor:pointer;
+
+}
+
+.btn.cancel{
+
+  background:#ece4d9;
+  color:#4f4033;
+
+}
+
+.btn.save{
+
+  background:linear-gradient(
+  135deg,
+  var(--primary),
+  var(--primary2)
+  );
+
+  color:#fff;
+
+}
+
+/* =========================
+RESPONSIVO
+========================= */
+
+@media(max-width:1100px){
+
+  body{
+    flex-direction:column;
+  }
+
+  .sidebar{
+
+    width:100%;
+    border-right:none;
+    border-bottom:1px solid var(--line);
+
+  }
+
+  .content{
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+
+@media(max-width:700px){
+
+  html,
+  body{
+    overflow:auto;
+  }
+
+  .form{
+    grid-template-columns:1fr;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .calendar{
+    gap:8px;
+  }
+
+  .day{
+    min-height:80px;
+  }
+
+  .topTitle h1{
+    font-size:28px;
+  }
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <div class="logo">
+    Hotel
+  </div>
+
+  <div class="sub">
+    Sistema Premium de Reservas
+  </div>
+
+  <button
+  class="btnNova"
+  onclick="abrirModal()">
+    + Adicionar Reserva
+  </button>
+
+  <div class="menu">
+
+    <div class="menuItem">
+      <h3>Check-in Hoje</h3>
+      <p id="checkinHoje">0 hóspedes</p>
+    </div>
+
+    <div class="menuItem">
+      <h3>Quartos Ocupados</h3>
+      <p id="ocupadosHoje">0 quartos</p>
+    </div>
+
+    <div class="menuItem">
+      <h3>Reservas Pendentes</h3>
+      <p id="pendentesHoje">0 reservas</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">
+
+    <div class="topTitle">
+      <h1>
+        Painel de Reservas
+      </h1>
+
+      <p>
+        Gestão completa de hospedagens
+      </p>
+    </div>
+
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards">
+
+    <div class="card">
+      <span>Total Reservas</span>
+      <h2 id="totalReservas">0</h2>
+    </div>
+
+    <div class="card">
+      <span>Faturamento</span>
+      <h2 id="faturamento">
+        R$ 0,00
+      </h2>
+    </div>
+
+    <div class="card">
+      <span>Quartos</span>
+      <h2>12</h2>
+    </div>
+
+    <div class="card">
+      <span>Disponíveis</span>
+      <h2 id="quartosDisponiveis">
+        0
+      </h2>
+    </div>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- CALENDAR -->
+    <div class="calendarBox">
+
+      <div class="sectionTitle">
+
+        <h2>
+          Calendário
+        </h2>
+
+      </div>
+
+      <div class="calendar" id="calendar">
+
+      </div>
+
+    </div>
+
+    <!-- QUARTOS -->
+    <div class="roomsBox">
+
+      <div class="sectionTitle">
+        <h2>Quartos</h2>
+      </div>
+
+      <div id="rooms"></div>
+
+    </div>
+
+  </div>
+
+  <!-- TABELA -->
+  <div class="tableWrap">
+
+    <div class="tableBox">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>Cliente</th>
+            <th>CPF</th>
+            <th>WhatsApp</th>
+            <th>Quarto</th>
+            <th>Check-in</th>
+            <th>Status</th>
+            <th>Valor</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="tbody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+
+  <div class="modal">
+
+    <h2>Nova Reserva</h2>
+
+    <div class="form">
+
+      <div class="formGroup full">
+        <label>Nome Completo</label>
+        <input
+        id="nome"
+        placeholder="Digite o nome completo">
+      </div>
+
+      <div class="formGroup">
+        <label>CPF</label>
+        <input
+        id="cpf"
+        placeholder="000.000.000-00">
+      </div>
+
+      <div class="formGroup">
+        <label>WhatsApp</label>
+        <input
+        id="whatsapp"
+        placeholder="(77) 99999-9999">
+      </div>
+
+      <div class="formGroup">
+        <label>Possui carro?</label>
+
+        <select id="carro">
+          <option>Não</option>
+          <option>Sim</option>
+        </select>
+      </div>
+
+      <div class="formGroup">
+        <label>Quarto</label>
+
+        <select id="quarto">
+          <option>Suíte Master</option>
+          <option>Luxo Casal</option>
+          <option>Executivo</option>
+          <option>Premium Vista</option>
+        </select>
+      </div>
+
+      <div class="formGroup">
+        <label>Check-in</label>
+        <input type="date" id="checkin">
+      </div>
+
+      <div class="formGroup">
+        <label>Check-out</label>
+        <input type="date" id="checkout">
+      </div>
+
+      <div class="formGroup">
+        <label>Status</label>
+
+        <select id="status">
+
+          <option>Pendente</option>
+          <option>Confirmado</option>
+          <option>Cancelado</option>
+
+        </select>
+      </div>
+
+      <div class="formGroup full">
+        <label>Observações</label>
+
+        <textarea
+        id="obs"
+        placeholder="Informações adicionais..."></textarea>
+      </div>
+
+    </div>
+
+    <div class="modalActions">
+
+      <button
+      class="btn cancel"
+      onclick="fecharModal()">
+
+        Cancelar
+
+      </button>
+
+      <button
+      class="btn save"
+      onclick="salvarReserva()">
+
+        Salvar Reserva
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+// =======================================
+// SUPABASE
+// =======================================
+
+const SUPABASE_URL =
+"https://SEU-PROJETO.supabase.co"
+
+const SUPABASE_KEY =
+"SUA_ANON_KEY"
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+)
+
+// =======================================
+// DADOS DOS QUARTOS
+// =======================================
+
+const quartos = [
+
+  {
+    nome:"Suíte Master",
+    valor:580,
+    status:"Disponível"
+  },
+
+  {
+    nome:"Luxo Casal",
+    valor:420,
+    status:"Reservado"
+  },
+
+  {
+    nome:"Executivo",
+    valor:280,
+    status:"Disponível"
+  },
+
+  {
+    nome:"Premium Vista",
+    valor:690,
+    status:"Ocupado"
+  }
+
+]
+
+// =======================================
+// MODAL
+// =======================================
+
+function abrirModal(){
+
+  overlay.style.display="flex"
+
+}
+
+function fecharModal(){
+
+  overlay.style.display="none"
+
+}
+
+// =======================================
+// RENDER QUARTOS
+// =======================================
+
+function renderRooms(){
+
+  rooms.innerHTML=""
+
+  quartos.forEach(q=>{
+
+    rooms.innerHTML+=`
+
+      <div class="room">
+
+        <div class="roomHeader">
+
+          <div>
+
+            <h3>${q.nome}</h3>
+
+            <p>
+              Quarto premium
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="price">
+          R$ ${q.valor.toFixed(2)}
+        </div>
+
+        <div class="
+        status
+        ${q.status.toLowerCase()}
+        ">
+
+          ${q.status}
+
+        </div>
+
+      </div>
+
+    `
+
+  })
+
+}
+
+// =======================================
+// CALENDARIO
+// =======================================
+
+function renderCalendar(){
+
+  const diasSemana =
+
+  [
+    "Dom",
+    "Seg",
+    "Ter",
+    "Qua",
+    "Qui",
+    "Sex",
+    "Sáb"
+  ]
+
+  calendar.innerHTML=""
+
+  diasSemana.forEach(d=>{
+
+    calendar.innerHTML+=`
+      <div class="dayName">
+        ${d}
+      </div>
+    `
+
+  })
+
+  for(let i=1;i<=31;i++){
+
+    calendar.innerHTML+=`
+
+      <div class="day">
+
+        <strong>${i}</strong>
+
+        ${
+          i===12
+          ?'<div class="reservaMini">Suíte Master</div>'
+          :''
+        }
+
+        ${
+          i===18
+          ?'<div class="reservaMini">Luxo Casal</div>'
+          :''
+        }
+
+      </div>
+
+    `
+
+  }
+
+}
+
+// =======================================
+// BUSCAR RESERVAS
+// =======================================
+
+async function carregarReservas(){
+
+  const {
+    data,
+    error
+  } = await supabase
+
+  .from("hotel_reservas")
+  .select("*")
+  .order("created_at",{ascending:false})
+
+  if(error){
+
+    console.log(error)
+    return
+
+  }
+
+  tbody.innerHTML=""
+
+  let total = 0
+  let faturamento = 0
+
+  data.forEach(r=>{
+
+    total++
+
+    faturamento +=
+    Number(r.valor || 0)
+
+    tbody.innerHTML+=`
+
+      <tr>
+
+        <td>${r.nome}</td>
+
+        <td>${r.cpf}</td>
+
+        <td>${r.whatsapp}</td>
+
+        <td>${r.quarto}</td>
+
+        <td>${r.checkin}</td>
+
+        <td>
+
+          <span class="
+          badge
+          ${r.status.toLowerCase()}
+          ">
+
+            ${r.status}
+
+          </span>
+
+        </td>
+
+        <td>
+          R$ ${Number(r.valor || 0)
+          .toFixed(2)}
+        </td>
+
+      </tr>
+
+    `
+
+  })
+
+  totalReservas.innerHTML =
+  total
+
+  faturamento.innerHTML =
+  faturamento.toLocaleString(
+  "pt-BR",
+  {
+    style:"currency",
+    currency:"BRL"
+  })
+
+}
+
+// =======================================
+// SALVAR
+// =======================================
+
+async function salvarReserva(){
+
+  const quartoSelecionado =
+  quartos.find(q=>
+  q.nome===quarto.value
+  )
+
+  const valor =
+  quartoSelecionado
+  ? quartoSelecionado.valor
+  : 0
+
+  const payload = {
+
+    nome:nome.value,
+    cpf:cpf.value,
+    whatsapp:whatsapp.value,
+
+    possui_carro:
+    carro.value,
+
+    quarto:quarto.value,
+
+    checkin:
+    checkin.value,
+
+    checkout:
+    checkout.value,
+
+    status:
+    status.value,
+
+    observacoes:
+    obs.value,
+
+    valor
+
+  }
+
+  const {
+    error
+  } = await supabase
+
+  .from("hotel_reservas")
+  .insert(payload)
+
+  if(error){
+
+    alert(
+      "Erro ao salvar"
+    )
+
+    console.log(error)
+
+    return
+
+  }
+
+  fecharModal()
+
+  carregarReservas()
+
+  alert(
+    "Reserva cadastrada!"
+  )
+
+}
+
+// =======================================
+// INIT
+// =======================================
+
+renderRooms()
+renderCalendar()
+carregarReservas()
+
+</script>
+
+</body>
+</html>
