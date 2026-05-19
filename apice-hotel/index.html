@@ -1365,7 +1365,30 @@ id="settingsMenu">
         readonly>
 
       </div>
+<div class="group full">
 
+  <label>
+    Informações do Quarto
+  </label>
+
+  <div
+  id="infoQuarto"
+
+  style="
+  background:#faf7f3;
+  border:1px solid #eadfce;
+  border-radius:22px;
+  padding:18px;
+  min-height:90px;
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  ">
+
+  </div>
+
+</div>
       <div class="group">
 
         <label>
@@ -1690,20 +1713,7 @@ function abrirFinanceiro(){
 // QUARTOS
 // =========================================
 
-const quartos = []
-
-for(let i=1;i<=200;i++){
-
-  quartos.push({
-
-    numero:i,
-
-    valor:
-    180 + (i*2)
-
-  })
-
-}
+let quartos = []
 
 // =========================================
 // DISPONIBILIDADE
@@ -1722,8 +1732,31 @@ async function carregarQuartosDisponiveis(){
   if(!entradaData || !saidaData)
   return
 
+  // =====================================
+  // BUSCAR QUARTOS
+  // =====================================
+
   const {
-    data
+    data:quartosData = []
+  } = await hotelSupabase
+
+  .from("hotel_quartos")
+
+  .select("*")
+
+  .eq(
+  "hotel",
+  "HOTEL APICE"
+  )
+
+  quartos = quartosData
+
+  // =====================================
+  // BUSCAR RESERVAS
+  // =====================================
+
+  const {
+    data:reservas = []
   } = await hotelSupabase
 
   .from("hotel_reservas")
@@ -1739,11 +1772,11 @@ async function carregarQuartosDisponiveis(){
 
     let ocupado = false
 
-    data.forEach(r=>{
+    reservas.forEach(r=>{
 
       if(
         Number(r.quarto_numero)
-        !== q.numero
+        !== Number(q.numero)
       ) return
 
       const entradaNova =
@@ -1758,6 +1791,10 @@ async function carregarQuartosDisponiveis(){
       const saidaExistente =
       new Date(r.saida)
 
+      // ==========================
+      // 1 HORA LIMPEZA
+      // ==========================
+
       saidaExistente.setHours(
       saidaExistente.getHours()+1
       )
@@ -1770,8 +1807,11 @@ async function carregarQuartosDisponiveis(){
       saidaNova >
       entradaExistente
 
-      if(conflito)
-      ocupado = true
+      if(conflito){
+
+        ocupado = true
+
+      }
 
     })
 
@@ -1780,10 +1820,28 @@ async function carregarQuartosDisponiveis(){
       quarto.innerHTML+=`
 
       <option
-      value="${q.numero}"
-      data-valor="${q.valor}">
 
-      Quarto ${q.numero}
+      value="${q.numero}"
+
+      data-valor="${q.valor}"
+
+      data-tipo="${q.tipo || ''}"
+
+      data-camas="${q.camas || 0}"
+
+      data-tv="${q.tv}"
+
+      data-ar="${q.ar}"
+
+      data-frigobar="${q.frigobar}"
+
+      >
+
+${q.nome}
+•
+Quarto ${q.numero}
+•
+${q.tipo || 'Standard'}
 
       </option>
 
@@ -1804,15 +1862,18 @@ async function carregarQuartosDisponiveis(){
 function atualizarValor(){
 
   const option =
+
   quarto.options[
   quarto.selectedIndex
   ]
 
-  if(!option) return
+  if(!option)
+  return
 
   valor.value =
+
   Number(
-  option.dataset.valor
+  option.dataset.valor || 0
   )
 
   .toLocaleString(
@@ -1822,23 +1883,87 @@ function atualizarValor(){
     currency:'BRL'
   })
 
+  // =====================================
+  // INFO QUARTO
+  // =====================================
+
+  infoQuarto.innerHTML = `
+
+    <div>
+
+      <strong>
+        Tipo
+      </strong>
+
+      <br>
+
+      ${option.dataset.tipo || '-'}
+
+    </div>
+
+    <div>
+
+      <strong>
+        Camas
+      </strong>
+
+      <br>
+
+      ${option.dataset.camas || 0}
+
+    </div>
+
+    <div>
+
+      <strong>
+        TV
+      </strong>
+
+      <br>
+
+      ${
+        option.dataset.tv === "true"
+        ? "Sim"
+        : "Não"
+      }
+
+    </div>
+
+    <div>
+
+      <strong>
+        Ar Condicionado
+      </strong>
+
+      <br>
+
+      ${
+        option.dataset.ar === "true"
+        ? "Sim"
+        : "Não"
+      }
+
+    </div>
+
+    <div>
+
+      <strong>
+        Frigobar
+      </strong>
+
+      <br>
+
+      ${
+        option.dataset.frigobar === "true"
+        ? "Sim"
+        : "Não"
+      }
+
+    </div>
+
+  `
+
 }
-
-entrada.addEventListener(
-"change",
-carregarQuartosDisponiveis
-)
-
-saida.addEventListener(
-"change",
-carregarQuartosDisponiveis
-)
-
-quarto.addEventListener(
-"change",
-atualizarValor
-)
-
 // =========================================
 // SALVAR
 // =========================================
@@ -1852,45 +1977,61 @@ async function salvarReserva(){
   quarto.selectedIndex
   ]
 
-  const payload = {
+const payload = {
 
-    hotel:"HOTEL APICE",
+  hotel:"HOTEL APICE",
 
-    nome:nome.value,
+  nome:nome.value,
 
-    cpf:cpf.value,
+  cpf:cpf.value,
 
-    whatsapp:
-    whatsapp.value,
+  whatsapp:
+  whatsapp.value,
 
-    possui_carro:
-    carro.value==="Sim",
+  possui_carro:
+  carro.value==="Sim",
 
-    quarto_numero:
-    Number(quarto.value),
+  quarto_numero:
+  Number(quarto.value),
 
-    quarto_nome:
-    "Quarto "+quarto.value,
+  quarto_nome:
+  option.textContent,
 
-    entrada:
-    entrada.value,
+  tipo_quarto:
+  option.dataset.tipo,
 
-    saida:
-    saida.value,
+  quantidade_camas:
+  Number(
+  option.dataset.camas || 0
+  ),
 
-    status:
-    status.value,
+  tv:
+  option.dataset.tv === "true",
 
-    valor:
-    Number(
-    option.dataset.valor
-    ),
+  ar:
+  option.dataset.ar === "true",
 
-    observacoes:
-    obs.value
+  frigobar:
+  option.dataset.frigobar === "true",
 
-  }
+  entrada:
+  entrada.value,
 
+  saida:
+  saida.value,
+
+  status:
+  status.value,
+
+  valor:
+  Number(
+  option.dataset.valor
+  ),
+
+  observacoes:
+  obs.value
+
+}
   const {
     error
   } = await hotelSupabase
@@ -2262,8 +2403,29 @@ async function carregarRooms(){
   const agora =
   new Date()
 
+  // =====================================
+  // QUARTOS
+  // =====================================
+
   const {
-    data
+    data:quartosData = []
+  } = await hotelSupabase
+
+  .from("hotel_quartos")
+
+  .select("*")
+
+  .eq(
+  "hotel",
+  "HOTEL APICE"
+  )
+
+  // =====================================
+  // RESERVAS
+  // =====================================
+
+  const {
+    data:reservas = []
   } = await hotelSupabase
 
   .from("hotel_reservas")
@@ -2275,7 +2437,10 @@ async function carregarRooms(){
   "HOTEL APICE"
   )
 
-  for(let i=1;i<=200;i++){
+  quartosDisponiveis.innerHTML =
+  quartosData.length
+
+  quartosData.forEach(q=>{
 
     let status =
     "disponivel"
@@ -2704,9 +2869,55 @@ Por favor confirme sua reserva.`
 
 </div>
 
-          <div>
+<div>
 
-            <strong>Valor</strong>
+  <strong>Tipo</strong>
+
+  <br>
+
+  ${r.tipo_quarto || '-'}
+
+</div>
+
+<div>
+
+  <strong>Camas</strong>
+
+  <br>
+
+  ${r.quantidade_camas || 0}
+
+</div>
+
+<div>
+
+  <strong>TV</strong>
+
+  <br>
+
+  ${r.tv ? 'Sim' : 'Não'}
+
+</div>
+
+<div>
+
+  <strong>Ar</strong>
+
+  <br>
+
+  ${r.ar ? 'Sim' : 'Não'}
+
+</div>
+
+<div>
+
+  <strong>Frigobar</strong>
+
+  <br>
+
+  ${r.frigobar ? 'Sim' : 'Não'}
+
+</div>
 
             <br>
 
