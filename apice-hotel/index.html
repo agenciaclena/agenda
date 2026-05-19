@@ -91,7 +91,8 @@ SIDEBAR
 .sidebar{
 
   width:320px;
-
+position:relative;
+padding-bottom:120px;
   background:
   linear-gradient(
   180deg,
@@ -200,6 +201,110 @@ SIDEBAR
 
 }
 
+
+/* =========================
+SETTINGS
+========================= */
+
+.settingsBtn{
+
+  position:absolute;
+
+  left:26px;
+
+  bottom:26px;
+
+  width:64px;
+  height:64px;
+
+  border:none;
+
+  border-radius:22px;
+
+  background:
+  linear-gradient(
+  135deg,
+  var(--primary),
+  var(--primary2)
+  );
+
+  color:#fff;
+
+  font-size:28px;
+
+  cursor:pointer;
+
+  box-shadow:var(--shadow);
+
+  z-index:100;
+
+}
+
+.settingsMenu{
+
+  position:absolute;
+
+  left:26px;
+
+  bottom:102px;
+
+  width:250px;
+
+  background:#fff;
+
+  border:
+  1px solid var(--line);
+
+  border-radius:26px;
+
+  padding:14px;
+
+  box-shadow:var(--shadow);
+
+  display:none;
+
+  flex-direction:column;
+
+  gap:10px;
+
+  z-index:999;
+
+}
+
+.settingsMenu button{
+
+  width:100%;
+
+  min-height:54px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:#f7f1e8;
+
+  color:#3d3126;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:.2s;
+
+}
+
+.settingsMenu button:hover{
+
+  background:#efe2d2;
+
+}
+
+
+
+
+
+
+  
 /* =========================
 MAIN
 ========================= */
@@ -998,7 +1103,41 @@ LOADING
 
     </div>
 
-  </div>
+</div>
+
+<button
+class="settingsBtn"
+id="settingsBtn">
+
+⚙️
+
+</button>
+
+<div
+class="settingsMenu"
+id="settingsMenu">
+
+  <button onclick="abrirConfigQuartos()">
+    Configurar Quartos
+  </button>
+
+  <button onclick="abrirConfigValores()">
+    Valores Diárias
+  </button>
+
+  <button onclick="abrirRelatorios()">
+    Relatórios
+  </button>
+
+  <button onclick="abrirUsuarios()">
+    Usuários
+  </button>
+
+  <button onclick="abrirFinanceiro()">
+    Financeiro
+  </button>
+
+</div>
 
 </div>
 
@@ -1421,7 +1560,91 @@ document
 "click",
 salvarReserva
 )
+// =========================================
+// SETTINGS MENU
+// =========================================
 
+const settingsBtn =
+document.getElementById(
+"settingsBtn"
+)
+
+const settingsMenu =
+document.getElementById(
+"settingsMenu"
+)
+
+settingsBtn.onclick=()=>{
+
+  settingsMenu.style.display=
+
+  settingsMenu.style.display==="flex"
+  ? "none"
+  : "flex"
+
+}
+
+document.addEventListener(
+"click",
+(e)=>{
+
+  if(
+    !settingsBtn.contains(e.target)
+    &&
+    !settingsMenu.contains(e.target)
+  ){
+
+    settingsMenu.style.display=
+    "none"
+
+  }
+
+})
+
+// =========================================
+// POPUPS
+// =========================================
+
+function abrirConfigQuartos(){
+
+  alert(
+  "Abrir configuração quartos"
+  )
+
+}
+
+function abrirConfigValores(){
+
+  alert(
+  "Abrir valores diárias"
+  )
+
+}
+
+function abrirRelatorios(){
+
+  alert(
+  "Abrir relatórios"
+  )
+
+}
+
+function abrirUsuarios(){
+
+  alert(
+  "Abrir usuários"
+  )
+
+}
+
+function abrirFinanceiro(){
+
+  alert(
+  "Abrir financeiro"
+  )
+
+}
+  
 // =========================================
 // QUARTOS
 // =========================================
