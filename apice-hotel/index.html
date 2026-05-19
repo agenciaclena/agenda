@@ -16,33 +16,41 @@ viewport-fit=cover
 
 <meta
 name="theme-color"
-content="#7a5c43">
+content="#8b6a4b">
 
-<title>Hotel Premium</title>
+<title>HOTEL APICE • RESERVAS</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="
+https://fonts.googleapis.com/css2?
+family=Inter:wght@400;500;600;700;800;900&
+family=Cormorant+Garamond:wght@500;600;700
+&display=swap"
+rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/
+@supabase/supabase-js@2
+"></script>
 
 <style>
 
 :root{
 
-  --bg:#f4efe8;
+  --bg:#f5efe7;
   --card:#ffffff;
-  --line:#e7dbca;
+  --line:#e7d9c8;
 
-  --primary:#7a5c43;
-  --primary2:#9b7653;
+  --primary:#8b6a4b;
+  --primary2:#a57b53;
 
-  --text:#2d241d;
-  --muted:#7c6b5c;
+  --text:#2b241e;
+  --muted:#7c6b5b;
 
-  --green:#1e9b57;
-  --red:#d64545;
-  --orange:#dd9726;
+  --green:#18995a;
+  --red:#d94b4b;
+  --orange:#dd9827;
 
   --shadow:
   0 10px 40px rgba(0,0,0,.08);
@@ -87,8 +95,8 @@ SIDEBAR
   background:
   linear-gradient(
   180deg,
-  #efe3d3,
-  #f8f2ea
+  #efe2d2,
+  #f7f1e8
   );
 
   border-right:
@@ -102,7 +110,7 @@ SIDEBAR
 
 .logo{
 
-  font-size:48px;
+  font-size:52px;
 
   font-family:
   'Cormorant Garamond',
@@ -118,22 +126,22 @@ SIDEBAR
 
   margin-top:6px;
 
-  color:var(--muted);
-
   font-size:13px;
+
+  color:var(--muted);
 
 }
 
 .btnNova{
 
   width:100%;
-  height:60px;
-
-  margin-top:28px;
+  height:62px;
 
   border:none;
 
-  border-radius:20px;
+  border-radius:22px;
+
+  margin-top:28px;
 
   background:
   linear-gradient(
@@ -144,8 +152,8 @@ SIDEBAR
 
   color:#fff;
 
-  font-weight:800;
   font-size:15px;
+  font-weight:800;
 
   cursor:pointer;
 
@@ -212,7 +220,7 @@ MAIN
 
 .topbar h1{
 
-  font-size:42px;
+  font-size:44px;
 
   font-family:
   'Cormorant Garamond',
@@ -322,7 +330,7 @@ CONTENT
 
 .boxTitle h2{
 
-  font-size:36px;
+  font-size:38px;
 
   font-family:
   'Cormorant Garamond',
@@ -358,7 +366,7 @@ CALENDAR
 
 .day{
 
-  min-height:90px;
+  min-height:100px;
 
   background:#faf7f3;
 
@@ -408,6 +416,9 @@ ROOMS
   flex-direction:column;
   gap:16px;
 
+  max-height:700px;
+  overflow:auto;
+
 }
 
 .room{
@@ -433,9 +444,9 @@ ROOMS
 
   margin-top:6px;
 
-  color:var(--muted);
-
   font-size:13px;
+
+  color:var(--muted);
 
 }
 
@@ -443,7 +454,7 @@ ROOMS
 
   margin-top:14px;
 
-  font-size:30px;
+  font-size:28px;
   font-weight:900;
 
   color:var(--primary);
@@ -472,13 +483,6 @@ ROOMS
 
   background:#e8f8ef;
   color:var(--green);
-
-}
-
-.badge.reservado{
-
-  background:#fff5e5;
-  color:var(--orange);
 
 }
 
@@ -592,7 +596,7 @@ MODAL
 
 .modal{
 
-  width:min(96vw,820px);
+  width:min(96vw,950px);
 
   background:#fff;
 
@@ -607,7 +611,7 @@ MODAL
 
 .modal h2{
 
-  font-size:42px;
+  font-size:46px;
 
   font-family:
   'Cormorant Garamond',
@@ -645,7 +649,6 @@ MODAL
 .group label{
 
   font-size:13px;
-
   font-weight:800;
 
 }
@@ -663,7 +666,7 @@ MODAL
 
   border-radius:18px;
 
-  min-height:56px;
+  min-height:58px;
 
   padding:16px;
 
@@ -693,7 +696,7 @@ textarea{
 
 .btn{
 
-  height:56px;
+  height:58px;
 
   border:none;
 
@@ -843,11 +846,11 @@ LOADING
 <div class="sidebar">
 
   <div class="logo">
-    Hotel
+    Ápice
   </div>
 
   <div class="sublogo">
-    Sistema Premium de Reservas
+    HOTEL APICE • Sistema Premium
   </div>
 
   <button
@@ -915,7 +918,7 @@ LOADING
     </h1>
 
     <p>
-      Controle premium de hospedagens
+      Gestão inteligente HOTEL APICE
     </p>
 
   </div>
@@ -946,10 +949,10 @@ LOADING
 
     <div class="card">
 
-      <span>Quartos</span>
+      <span>Total Quartos</span>
 
-      <h2 id="totalQuartos">
-        0
+      <h2>
+        200
       </h2>
 
     </div>
@@ -997,7 +1000,7 @@ LOADING
       <div class="boxTitle">
 
         <h2>
-          Quartos
+          Quartos Disponíveis
         </h2>
 
       </div>
@@ -1025,11 +1028,9 @@ LOADING
           <tr>
 
             <th>Cliente</th>
-            <th>CPF</th>
-            <th>WhatsApp</th>
             <th>Quarto</th>
-            <th>Check-in</th>
-            <th>Check-out</th>
+            <th>Entrada</th>
+            <th>Saída</th>
             <th>Status</th>
             <th>Valor</th>
 
@@ -1112,7 +1113,7 @@ LOADING
       <div class="group">
 
         <label>
-          Quarto
+          Quarto Disponível
         </label>
 
         <select id="quarto"></select>
@@ -1122,24 +1123,36 @@ LOADING
       <div class="group">
 
         <label>
-          Check-in
+          Valor
         </label>
 
         <input
-        type="date"
-        id="checkin">
+        id="valor"
+        readonly>
 
       </div>
 
       <div class="group">
 
         <label>
-          Check-out
+          Entrada
         </label>
 
         <input
-        type="date"
-        id="checkout">
+        type="datetime-local"
+        id="entrada">
+
+      </div>
+
+      <div class="group">
+
+        <label>
+          Saída
+        </label>
+
+        <input
+        type="datetime-local"
+        id="saida">
 
       </div>
 
@@ -1284,10 +1297,6 @@ function fecharModal(){
 
 }
 
-// =========================================
-// EVENTOS
-// =========================================
-
 document
 .getElementById(
 "btnNovaReserva"
@@ -1319,152 +1328,157 @@ salvarReserva
 )
 
 // =========================================
-// MASCARA CPF
+// QUARTOS
 // =========================================
 
-cpf.addEventListener(
-"input",
-()=>{
+const quartos = []
 
-  let v =
-  cpf.value.replace(/\D/g,'')
+for(let i=1;i<=200;i++){
 
-  v=v.replace(
-  /(\d{3})(\d)/,
-  '$1.$2'
-  )
+  quartos.push({
 
-  v=v.replace(
-  /(\d{3})(\d)/,
-  '$1.$2'
-  )
+    numero:i,
 
-  v=v.replace(
-  /(\d{3})(\d{1,2})$/,
-  '$1-$2'
-  )
-
-  cpf.value=v
-
-})
-
-// =========================================
-// MASCARA WHATS
-// =========================================
-
-whatsapp.addEventListener(
-"input",
-()=>{
-
-  let v =
-  whatsapp.value
-  .replace(/\D/g,'')
-
-  v=v.replace(
-  /^(\d{2})(\d)/g,
-  '($1) $2'
-  )
-
-  v=v.replace(
-  /(\d)(\d{4})$/,
-  '$1-$2'
-  )
-
-  whatsapp.value=v
-
-})
-
-// =========================================
-// CARREGAR QUARTOS
-// =========================================
-
-async function carregarQuartos(){
-
-  const {
-    data,
-    error
-  } = await hotelSupabase
-
-  .from("hotel_quartos")
-  .select("*")
-  .order("valor",{ascending:false})
-
-  if(error){
-
-    console.log(error)
-    return
-
-  }
-
-  rooms.innerHTML=""
-  quarto.innerHTML=""
-
-  totalQuartos.innerHTML=
-  data.length
-
-  let disp=0
-
-  data.forEach(q=>{
-
-    if(q.status==="Disponível")
-    disp++
-
-    quarto.innerHTML+=`
-
-      <option
-      value="${q.id}"
-      data-nome="${q.nome}"
-      data-valor="${q.valor}">
-
-      ${q.nome}
-
-      </option>
-
-    `
-
-    rooms.innerHTML+=`
-
-      <div class="room">
-
-        <h3>
-          ${q.nome}
-        </h3>
-
-        <p>
-          ${q.descricao || ''}
-        </p>
-
-        <div class="roomPrice">
-
-          ${Number(q.valor)
-          .toLocaleString(
-          'pt-BR',
-          {
-            style:'currency',
-            currency:'BRL'
-          })}
-
-        </div>
-
-        <div class="
-        badge
-        ${q.status.toLowerCase()}
-        ">
-
-          ${q.status}
-
-        </div>
-
-      </div>
-
-    `
+    valor:
+    180 + (i*2)
 
   })
 
-  quartosDisponiveis.innerHTML=
-  disp
+}
+
+// =========================================
+// DISPONIBILIDADE
+// =========================================
+
+async function carregarQuartosDisponiveis(){
+
+  const entradaData =
+  entrada.value
+
+  const saidaData =
+  saida.value
+
+  quarto.innerHTML=""
+
+  if(!entradaData || !saidaData)
+  return
+
+  const {
+    data
+  } = await hotelSupabase
+
+  .from("hotel_reservas")
+
+  .select("*")
+
+  .eq(
+  "hotel",
+  "HOTEL APICE"
+  )
+
+  quartos.forEach(q=>{
+
+    let ocupado = false
+
+    data.forEach(r=>{
+
+      if(
+        Number(r.quarto_numero)
+        !== q.numero
+      ) return
+
+      const entradaNova =
+      new Date(entradaData)
+
+      const saidaNova =
+      new Date(saidaData)
+
+      const entradaExistente =
+      new Date(r.entrada)
+
+      const saidaExistente =
+      new Date(r.saida)
+
+      saidaExistente.setHours(
+      saidaExistente.getHours()+1
+      )
+
+      const conflito =
+
+      entradaNova <
+      saidaExistente &&
+
+      saidaNova >
+      entradaExistente
+
+      if(conflito)
+      ocupado = true
+
+    })
+
+    if(!ocupado){
+
+      quarto.innerHTML+=`
+
+      <option
+      value="${q.numero}"
+      data-valor="${q.valor}">
+
+      Quarto ${q.numero}
+
+      </option>
+
+      `
+
+    }
+
+  })
+
+  atualizarValor()
 
 }
+
+// =========================================
+// VALOR
+// =========================================
+
+function atualizarValor(){
+
+  const option =
+  quarto.options[
+  quarto.selectedIndex
+  ]
+
+  if(!option) return
+
+  valor.value =
+  Number(
+  option.dataset.valor
+  )
+
+  .toLocaleString(
+  'pt-BR',
+  {
+    style:'currency',
+    currency:'BRL'
+  })
+
+}
+
+entrada.addEventListener(
+"change",
+carregarQuartosDisponiveis
+)
+
+saida.addEventListener(
+"change",
+carregarQuartosDisponiveis
+)
+
+quarto.addEventListener(
+"change",
+atualizarValor
+)
 
 // =========================================
 // SALVAR
@@ -1481,6 +1495,8 @@ async function salvarReserva(){
 
   const payload = {
 
+    hotel:"HOTEL APICE",
+
     nome:nome.value,
 
     cpf:cpf.value,
@@ -1491,17 +1507,17 @@ async function salvarReserva(){
     possui_carro:
     carro.value==="Sim",
 
-    quarto_id:
-    option.value,
+    quarto_numero:
+    Number(quarto.value),
 
     quarto_nome:
-    option.dataset.nome,
+    "Quarto "+quarto.value,
 
-    checkin:
-    checkin.value,
+    entrada:
+    entrada.value,
 
-    checkout:
-    checkout.value,
+    saida:
+    saida.value,
 
     status:
     status.value,
@@ -1541,6 +1557,7 @@ async function salvarReserva(){
 
   carregarReservas()
   renderCalendar()
+  carregarRooms()
 
   alert(
   "Reserva criada!"
@@ -1549,30 +1566,29 @@ async function salvarReserva(){
 }
 
 // =========================================
-// CARREGAR RESERVAS
+// RESERVAS
 // =========================================
 
 async function carregarReservas(){
 
   const {
-    data,
-    error
+    data
   } = await hotelSupabase
 
   .from("hotel_reservas")
+
   .select("*")
+
+  .eq(
+  "hotel",
+  "HOTEL APICE"
+  )
+
   .order(
   "created_at",
   {
     ascending:false
   })
-
-  if(error){
-
-    console.log(error)
-    return
-
-  }
 
   tbody.innerHTML=""
 
@@ -1600,7 +1616,10 @@ async function carregarReservas(){
     if(r.status==="Confirmado")
     conf++
 
-    if(r.checkin===dataHoje)
+    if(
+      r.entrada?.split('T')[0]
+      === dataHoje
+    )
     hoje++
 
     tbody.innerHTML+=`
@@ -1609,15 +1628,21 @@ async function carregarReservas(){
 
         <td>${r.nome}</td>
 
-        <td>${r.cpf}</td>
-
-        <td>${r.whatsapp}</td>
-
         <td>${r.quarto_nome}</td>
 
-        <td>${r.checkin}</td>
+        <td>
 
-        <td>${r.checkout}</td>
+          ${new Date(r.entrada)
+          .toLocaleString('pt-BR')}
+
+        </td>
+
+        <td>
+
+          ${new Date(r.saida)
+          .toLocaleString('pt-BR')}
+
+        </td>
 
         <td>
 
@@ -1701,7 +1726,7 @@ async function carregarReservas(){
 }
 
 // =========================================
-// ALTERAR STATUS
+// STATUS
 // =========================================
 
 async function alterarStatus(
@@ -1732,7 +1757,13 @@ async function renderCalendar(){
   } = await hotelSupabase
 
   .from("hotel_reservas")
+
   .select("*")
+
+  .eq(
+  "hotel",
+  "HOTEL APICE"
+  )
 
   const dias =
 
@@ -1768,12 +1799,12 @@ async function renderCalendar(){
 
     data.forEach(r=>{
 
-      if(!r.checkin)
+      if(!r.entrada)
       return
 
       const dia =
       new Date(
-      r.checkin
+      r.entrada
       ).getDate()
 
       if(dia===i){
@@ -1809,36 +1840,64 @@ async function renderCalendar(){
 }
 
 // =========================================
-// REALTIME
+// ROOMS
 // =========================================
 
-hotelSupabase
+async function carregarRooms(){
 
-.channel("hotel")
+  rooms.innerHTML=""
 
-.on(
-"postgres_changes",
-{
-  event:"*",
-  schema:"public",
-  table:"hotel_reservas"
-},
-()=>{
+  for(let i=1;i<=20;i++){
 
-  carregarReservas()
-  renderCalendar()
+    rooms.innerHTML+=`
 
-})
+      <div class="room">
 
-.subscribe()
+        <h3>
+          Quarto ${i}
+        </h3>
+
+        <p>
+          HOTEL APICE
+        </p>
+
+        <div class="roomPrice">
+
+          ${Number(
+          180 + (i*2)
+          ).toLocaleString(
+          'pt-BR',
+          {
+            style:'currency',
+            currency:'BRL'
+          })}
+
+        </div>
+
+        <div class="
+        badge
+        disponível
+        ">
+
+          Disponível
+
+        </div>
+
+      </div>
+
+    `
+
+  }
+
+}
 
 // =========================================
 // INIT
 // =========================================
 
-carregarQuartos()
 carregarReservas()
 renderCalendar()
+carregarRooms()
 
 </script>
 
