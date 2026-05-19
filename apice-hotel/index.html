@@ -619,22 +619,6 @@ MODAL
   max-height:94vh;
   overflow:auto;
 
-  animation:show .25s ease;
-
-}
-
-@keyframes show{
-
-  from{
-    transform:translateY(20px);
-    opacity:0;
-  }
-
-  to{
-    transform:translateY(0);
-    opacity:1;
-  }
-
 }
 
 .modal h2{
@@ -825,10 +809,6 @@ LOADING
 
 }
 
-/* =========================
-RESPONSIVO
-========================= */
-
 @media(max-width:1200px){
 
   body{
@@ -872,14 +852,6 @@ RESPONSIVO
     font-size:32px;
   }
 
-  .calendar{
-    gap:6px;
-  }
-
-  .day{
-    min-height:75px;
-  }
-
 }
 
 </style>
@@ -900,7 +872,7 @@ RESPONSIVO
 
   <button
   class="btnNova"
-  onclick="abrirModal()">
+  id="btnNovaReserva">
 
     + Nova Reserva
 
@@ -1118,9 +1090,7 @@ RESPONSIVO
         </label>
 
         <input
-        id="nome"
-        placeholder="
-        Digite o nome completo">
+        id="nome">
 
       </div>
 
@@ -1130,10 +1100,7 @@ RESPONSIVO
           CPF
         </label>
 
-        <input
-        id="cpf"
-        placeholder="
-        000.000.000-00">
+        <input id="cpf">
 
       </div>
 
@@ -1143,10 +1110,7 @@ RESPONSIVO
           WhatsApp
         </label>
 
-        <input
-        id="whatsapp"
-        placeholder="
-        (77) 99999-9999">
+        <input id="whatsapp">
 
       </div>
 
@@ -1235,9 +1199,7 @@ RESPONSIVO
         </label>
 
         <textarea
-        id="obs"
-        placeholder="
-        Informações adicionais..."></textarea>
+        id="obs"></textarea>
 
       </div>
 
@@ -1250,7 +1212,7 @@ RESPONSIVO
       btn
       btnCancel
       "
-      onclick="fecharModal()">
+      id="btnCancelar">
 
         Cancelar
 
@@ -1261,7 +1223,7 @@ RESPONSIVO
       btn
       btnSave
       "
-      onclick="salvarReserva()">
+      id="btnSalvar">
 
         Salvar Reserva
 
@@ -1308,18 +1270,29 @@ SUPABASE_KEY
 )
 
 // =========================================
+// ELEMENTOS
+// =========================================
+
+const overlay =
+document.getElementById(
+"overlay"
+)
+
+const loadingEl =
+document.getElementById(
+"loading"
+)
+
+// =========================================
 // LOADING
 // =========================================
 
 function loading(show=true){
 
   loadingEl.style.display =
-  show ? 'flex' : 'none'
+  show ? "flex" : "none"
 
 }
-
-const loadingEl =
-document.getElementById("loading")
 
 // =========================================
 // MODAL
@@ -1338,10 +1311,46 @@ function fecharModal(){
 }
 
 // =========================================
+// EVENTOS
+// =========================================
+
+document
+.getElementById(
+"btnNovaReserva"
+)
+
+.addEventListener(
+"click",
+abrirModal
+)
+
+document
+.getElementById(
+"btnCancelar"
+)
+
+.addEventListener(
+"click",
+fecharModal
+)
+
+document
+.getElementById(
+"btnSalvar"
+)
+
+.addEventListener(
+"click",
+salvarReserva
+)
+
+// =========================================
 // MASCARA CPF
 // =========================================
 
-cpf.addEventListener("input",()=>{
+cpf.addEventListener(
+"input",
+()=>{
 
   let v =
   cpf.value.replace(/\D/g,'')
@@ -1369,7 +1378,9 @@ cpf.addEventListener("input",()=>{
 // MASCARA WHATS
 // =========================================
 
-whatsapp.addEventListener("input",()=>{
+whatsapp.addEventListener(
+"input",
+()=>{
 
   let v =
   whatsapp.value
@@ -1414,15 +1425,15 @@ async function carregarQuartos(){
   rooms.innerHTML=""
   quarto.innerHTML=""
 
-  let disponiveis=0
-
   totalQuartos.innerHTML=
   data.length
+
+  let disp=0
 
   data.forEach(q=>{
 
     if(q.status==="Disponível")
-    disponiveis++
+    disp++
 
     quarto.innerHTML+=`
 
@@ -1432,14 +1443,6 @@ async function carregarQuartos(){
       data-valor="${q.valor}">
 
       ${q.nome}
-      •
-      ${Number(q.valor)
-      .toLocaleString(
-      'pt-BR',
-      {
-        style:'currency',
-        currency:'BRL'
-      })}
 
       </option>
 
@@ -1493,12 +1496,12 @@ async function carregarQuartos(){
   })
 
   quartosDisponiveis.innerHTML=
-  disponiveis
+  disp
 
 }
 
 // =========================================
-// SALVAR RESERVA
+// SALVAR
 // =========================================
 
 async function salvarReserva(){
@@ -1512,11 +1515,9 @@ async function salvarReserva(){
 
   const payload = {
 
-    nome:
-    nome.value,
+    nome:nome.value,
 
-    cpf:
-    cpf.value,
+    cpf:cpf.value,
 
     whatsapp:
     whatsapp.value,
@@ -1536,13 +1537,13 @@ async function salvarReserva(){
     checkout:
     checkout.value,
 
+    status:
+    status.value,
+
     valor:
     Number(
     option.dataset.valor
     ),
-
-    status:
-    status.value,
 
     observacoes:
     obs.value
@@ -1560,9 +1561,11 @@ async function salvarReserva(){
 
     loading(false)
 
-    alert("Erro ao salvar")
-
     console.log(error)
+
+    alert(
+    "Erro ao salvar"
+    )
 
     return
 
@@ -1576,7 +1579,10 @@ async function salvarReserva(){
     status:"Reservado"
   })
 
-  .eq("id",option.value)
+  .eq(
+  "id",
+  option.value
+  )
 
   fecharModal()
 
@@ -1586,7 +1592,9 @@ async function salvarReserva(){
 
   loading(false)
 
-  alert("Reserva cadastrada!")
+  alert(
+  "Reserva criada!"
+  )
 
 }
 
@@ -1605,7 +1613,11 @@ async function carregarReservas(){
 
   .from("hotel_reservas")
   .select("*")
-  .order("created_at",{ascending:false})
+  .order(
+  "created_at",
+  {
+    ascending:false
+  })
 
   loading(false)
 
@@ -1619,7 +1631,7 @@ async function carregarReservas(){
   tbody.innerHTML=""
 
   let total=0
-  let faturamento=0
+  let fat=0
   let pend=0
   let conf=0
   let hoje=0
@@ -1633,7 +1645,7 @@ async function carregarReservas(){
 
     total++
 
-    faturamento +=
+    fat +=
     Number(r.valor || 0)
 
     if(r.status==="Pendente")
@@ -1649,29 +1661,17 @@ async function carregarReservas(){
 
       <tr>
 
-        <td>
-          ${r.nome}
-        </td>
+        <td>${r.nome}</td>
 
-        <td>
-          ${r.cpf}
-        </td>
+        <td>${r.cpf}</td>
 
-        <td>
-          ${r.whatsapp}
-        </td>
+        <td>${r.whatsapp}</td>
 
-        <td>
-          ${r.quarto_nome}
-        </td>
+        <td>${r.quarto_nome}</td>
 
-        <td>
-          ${r.checkin}
-        </td>
+        <td>${r.checkin}</td>
 
-        <td>
-          ${r.checkout}
-        </td>
+        <td>${r.checkout}</td>
 
         <td>
 
@@ -1733,7 +1733,7 @@ async function carregarReservas(){
 
   faturamento.innerHTML=
 
-  faturamento.toLocaleString(
+  fat.toLocaleString(
   'pt-BR',
   {
     style:'currency',
@@ -1776,7 +1776,7 @@ status
 }
 
 // =========================================
-// CALENDAR
+// CALENDARIO
 // =========================================
 
 async function renderCalendar(){
@@ -1822,7 +1822,8 @@ async function renderCalendar(){
 
     data.forEach(r=>{
 
-      if(!r.checkin) return
+      if(!r.checkin)
+      return
 
       const dia =
       new Date(
